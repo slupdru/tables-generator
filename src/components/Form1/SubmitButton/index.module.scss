@@ -1,0 +1,11 @@
+.root{
+    height: 42px;
+    background: #C2CBD1;
+    border-radius: 4px;
+    font-weight: 700;
+    color: #FFFFFF;
+    border: 0;
+    &:hover{
+        background: #a3aaaf
+    }
+}

@@ -1,0 +1,11 @@
+.root {
+    height: 42px;
+    padding: 0 14px;
+    background: #FFFFFF;
+    border: 1px solid #E6ECEF;
+    box-sizing: border-box;
+    border-radius: 4px;
+    &::placeholder {
+        color: #868A8D;
+    }
+}
