@@ -1,0 +1,37 @@
+.root{
+    display: grid;
+    grid-row-gap: 12px;
+    
+    & .table{
+        border-collapse: collapse;
+        border: none;
+        border-spacing: 0px;
+        thead{
+            background: #0A508B;
+        }
+        th {
+            border: 1px #0A508B solid;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: inherit;
+        }
+        td {
+            border: 1px #EBEBEB solid;
+            color: #868A8D;
+        }
+        th, td{
+            padding: 9px 12px;
+        }
+        & .actionsCell{
+            width: 192px;
+            padding: 0px;
+        }
+        & .buttonsContainer{
+            display: grid;
+            grid-auto-flow: column;
+            grid-gap: 53px;
+            justify-content: center;
+        }
+    }
+
+}
+

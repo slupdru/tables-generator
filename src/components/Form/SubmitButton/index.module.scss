@@ -1,11 +1,12 @@
 .root{
     height: 42px;
-    background: #C2CBD1;
     border-radius: 4px;
     font-weight: 700;
     color: #FFFFFF;
+    background: #1493FE;
     border: 0;
-    &:hover{
-        background: #a3aaaf
+    &:disabled{
+        background: #C2CBD1;
     }
+
 }
