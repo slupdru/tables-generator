@@ -5,76 +5,71 @@ import Table from '../components/Table'
 import Modal from '../components/Modal'
 import { v1 } from 'uuid';
 
-export default () => {
 
-  const [tablesData, setTablesData] = React.useState([[]]);
+
+function reducer(tablesData, action) {
+  const newTablesData = [...tablesData];
+  const {payload} = action;
+  switch (action.type) {
+    case 'addPerson':
+      newTablesData[0] = [...newTablesData[0], { ...payload.person, id: v1() }]
+      return newTablesData;
+    case 'modalSubmit':
+      newTablesData[payload.tableIndex] = newTablesData[payload.tableIndex].map(el => el.id === payload.person.id ? payload.person : el)
+      return newTablesData;
+    case 'deleteRow':
+      newTablesData[payload.tableIndex] = newTablesData[payload.tableIndex].filter(el => el.id !== payload.id)
+      return newTablesData;
+    case 'copyTable':
+      newTablesData.splice(payload.tableIndex+1, 0, newTablesData[payload.tableIndex])
+      return newTablesData;
+    case 'deleteTable':
+      newTablesData.splice(payload.tableIndex, 1)
+      return newTablesData;
+    default:
+      throw new Error();
+  }
+}
+
+export default () => {
+  const [tablesData, dispatch] = React.useReducer(reducer, [[]]);
 
   const [showModalWithItem, setShowModalWithItem] = React.useState(undefined);
 
-  const handleAddPerson = (person) => {
-    setTablesData((tableData) => {
-      const newTableData = [...tableData];
-      newTableData[0] = [...newTableData[0], { ...person, id: v1() }]
-      return newTableData;
-    })
-  }
   const handleModalSubmit = (person, tableIndex) => {
-    setTablesData((tableData) => {
-      const newTableData = [...tableData]
-      newTableData[tableIndex] = newTableData[tableIndex].map(el => el.id === person.id ? person : el)
-      return newTableData;
-    })
+    dispatch({type: 'modalSubmit', payload: {person, tableIndex}})
     setShowModalWithItem(undefined)
   }
   const onEditRow = React.useCallback((id, tableIndex) => {
     setShowModalWithItem({ id, tableIndex })
   }, [])
 
-  const onDeleteRow = React.useCallback((id, tableIndex) => {
-    setTablesData((tableData) => {
-      const newTableData = [...tableData]
-      newTableData[tableIndex] = newTableData[tableIndex].filter(el => el.id !== id)
-      return newTableData;
-    })
-  }, [])
-  const onCopyTable = React.useCallback((tableIndex) => {
-    setTablesData((tableData) => {
-      const newTableData = [...tableData]
-      newTableData.splice(tableIndex+1, 0, newTableData[tableIndex])
-      return newTableData;
-    })
-
-  }, [])
-  const onDeleteTable = React.useCallback((tableIndex) => {
-    setTablesData((tableData) => {
-      const newTableData = [...tableData]
-      newTableData.splice(tableIndex, 1)
-      return newTableData;
-    })
+  const handleAddPerson = React.useCallback((person) => {
+    dispatch({type: 'addPerson', payload: {person}})
   }, [])
 
   return (
     <div className={styles.root}>
-      <Form onSubmit={handleAddPerson} submitButtonText="ADD" />
+      <Form onSubmit={(handleAddPerson)} submitButtonText="ADD" />
       <div className={styles.tablesList}>
         {tablesData.map((data, index) => (
           <Table
             key={index}
             onEditRow={(id) => onEditRow(id, index)}
-            onDeleteRow={(id) => { onDeleteRow(id, index) }}
-            onCopy={ ()=> onCopyTable(index)}
-            onDelete={index !== 0 ? ()=> onDeleteTable(index) : undefined}
+            onDeleteRow={(id) => { dispatch({type:'deleteRow', payload: {id, tableIndex:index}})}}
+            onCopy={ ()=> { dispatch({type:'copyTable', payload: {tableIndex:index}})}}
+            onDelete={index !== 0 ? ()=> dispatch({type:'deleteTable', payload: {tableIndex:index}}) : undefined}
             data={data} />
         )
         )}
       </div>
-      {showModalWithItem && <Modal isShown={true}>
+      <Modal isShown={Boolean(showModalWithItem)}>
         <Form 
-          initialValues={tablesData[showModalWithItem.tableIndex].find(el => el.id === showModalWithItem.id)}
+          initialValues={showModalWithItem && tablesData[showModalWithItem.tableIndex].find(el => el.id === showModalWithItem.id)}
           onSubmit={(person) => handleModalSubmit(person, showModalWithItem.tableIndex)}
           submitButtonText="OK" 
         />
-      </Modal>}
+      </Modal>
     </div>
   );
 };

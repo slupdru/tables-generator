@@ -37,6 +37,7 @@ export default ({onSubmit: onSubmitProp, submitButtonText, initialValues}) => {
         <Formik
         initialValues={mapInitialValues(initialValues)}
         onSubmit={onSubmit}
+        enableReinitialize={true}
       >
         {({
           values,
