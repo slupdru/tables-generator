@@ -1,12 +1,11 @@
-.root{
-    height: 42px;
-    border-radius: 4px;
-    font-weight: 700;
-    color: #FFFFFF;
-    background: #1493FE;
-    border: 0;
-    &:disabled{
-        background: #C2CBD1;
-    }
-
+.root {
+  height: 42px;
+  border-radius: 4px;
+  font-weight: 700;
+  color: #ffffff;
+  background: #1493fe;
+  border: 0;
+  &:disabled {
+    background: #c2cbd1;
+  }
 }

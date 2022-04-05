@@ -1,11 +1,10 @@
 .root {
   padding: 20px;
   display: grid;
-  grid-gap: 20px;
+  grid-gap: 40px;
   justify-items: center;
-  & .tablesList{
+  & .tablesList {
     display: grid;
     grid-gap: 60px;
   }
 }
-

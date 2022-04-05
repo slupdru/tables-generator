@@ -1,0 +1,16 @@
+.root {
+  padding: 0;
+  border: none;
+  outline: none;
+  font: inherit;
+  text-decoration-line: underline;
+  background: none;
+
+  &.normal {
+    color: #057ae3;
+  }
+
+  &.danger {
+    color: #b0263d;
+  }
+}

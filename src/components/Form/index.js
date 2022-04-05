@@ -16,47 +16,58 @@ const initialValuesDefault = {
     name: '',
     surname: '',
     age: '',
-    city: null 
+    city: null
 }
 
-function mapSubmitedData(values){
-    return {...values, city:values.city.value }
+function mapSubmitedData(values) {
+    return { ...values, city: values.city.value }
 }
 
-function mapInitialValues(values){
-    return values ? {...values, city:citiesOptions.find(el=>el.value === values.city)} : initialValuesDefault 
+function mapInitialValues(values) {
+    return values ? { ...values, city: citiesOptions.find(el => el.value === values.city) } : initialValuesDefault
 }
 
-export default ({onSubmit: onSubmitProp, submitButtonText, initialValues}) => {
-    const onSubmit = React.useCallback((values, {resetForm}) => {
+export default ({ onSubmit: onSubmitProp, submitButtonText, initialValues }) => {
+    const onSubmit = React.useCallback((values, { resetForm }) => {
         onSubmitProp(mapSubmitedData(values))
         resetForm()
     }, [onSubmitProp])
 
     return (
         <Formik
-        initialValues={mapInitialValues(initialValues)}
-        onSubmit={onSubmit}
-        enableReinitialize={true}
-      >
-        {({
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          setFieldValue,
-          isSubmitting,
-        }) => (
-            <form className={styles.root} onSubmit={handleSubmit}>
-                <Input value={values.name} placeholder='Name' onChange={handleChange} name="name" />
-                <Input value={values.surname} placeholder='Surname' onChange={handleChange} name="surname" />
-                <Input value={values.age} placeholder='Age' onChange={handleChange} name="age" />
-                <Select value={values.city} options={citiesOptions} placeholder="Select" onChange={(option)=>setFieldValue('city', option)}/>
-                <SubmitButton value={submitButtonText} disabled={Object.values(values).some(el=>!Boolean(el))}/>
-            </form>
-        )}
-      </Formik>
+            initialValues={mapInitialValues(initialValues)}
+            onSubmit={onSubmit}
+            enableReinitialize={true}
+            validate={values => {
+                const errors = {};
+                const numberAge = Number(values.age)
+                if (!(Number.isInteger(numberAge) && numberAge < 130)) {
+                    errors.age = 'Age entered incorrectly';
+                }
+                if (values.name.length > 102) {
+                    errors.name = 'Please enter a shorter name';
+                }
+                if (values.surname.length > 102) {
+                    errors.surname = 'Please enter a shorter surname';
+                }
+                return errors;
+            }}
+        >
+            {({
+                values,
+                errors,
+                handleChange,
+                handleSubmit,
+                setFieldValue,
+            }) => (
+                <form className={styles.root} onSubmit={handleSubmit}>
+                    <Input value={values.name} placeholder='Name' onChange={handleChange} name="name" errorMessage={errors.name} />
+                    <Input value={values.surname} placeholder='Surname' onChange={handleChange} name="surname" errorMessage={errors.surname} />
+                    <Input value={values.age} placeholder='Age' onChange={handleChange} name="age" errorMessage={errors.age} />
+                    <Select value={values.city} options={citiesOptions} placeholder="Select" onChange={(option) => setFieldValue('city', option)} />
+                    <SubmitButton value={submitButtonText} disabled={Object.values(values).some(el => !Boolean(el))} />
+                </form>
+            )}
+        </Formik>
     )
 }

@@ -1,7 +1,11 @@
-*{
+* {
   box-sizing: border-box;
 }
-input, textarea, select { font-family:inherit; }
+input,
+textarea,
+select {
+  font-family: inherit;
+}
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
@@ -10,7 +14,9 @@ body {
   font-size: 12px;
   line-height: 14px;
 }
-input, textarea, select {   
+input,
+textarea,
+select {
   font-family: inherit;
   font-style: inherit;
   font-weight: inherit;
