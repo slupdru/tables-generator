@@ -1,5 +1,5 @@
 import React from "react";
-import TableBar from "../TableBar";
+import TableBar from "./TableBar";
 import styles from './index.module.scss'
 import TableRow from "./TableRow";
 
